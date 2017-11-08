@@ -37,17 +37,12 @@ public class Grammar {
         stepTwo(rules);
         stepThree(rules);
         stepFour(rules);
-        // UNCOMMENT VERSION OF STEP U WANT TO USE if CYK is WRONG!
-        // if CYK is wrong comment step five and try again.
         stepFive(rules);
-//         stepFiveV2 (rules);
         return rules;
-
     }
 
     /**
-     * ############## STEP FIVE ################## 1st version done by Iordanis
-     * Fostiropoulos - NOT 100% correct needs 2 hours more of debugging.
+     * ############## STEP FIVE ##################
      *
      * @param rules
      */
@@ -96,10 +91,6 @@ public class Grammar {
             String[] production = unitProductions.get(i);
             step5Recursion(rules, production, getIndexInRules(rules, production));
         }
-        /*for (Map.Entry<Integer, String[]> unitProductionWithIndex:
-                unitProductionsMap.entrySet()){
-            step5Recursion (rules, unitProductionWithIndex.getValue(), unitProductionWithIndex.getKey());
-        }*/
         // remove duplicate rules
         for (int i = 0; i < rules.size(); i++) {
             String[] rule = rules.get(i);
@@ -177,12 +168,6 @@ public class Grammar {
                 } else if (rules.get(j).length == 2
                         && Character.isUpperCase(rules.get(j)[1].charAt(0))) {
 
-                    // this part hasn't been debugged its for complicated cfgs
-                    // grammars.
-                    /*
-                     * It won't work exactly correct for grammar S A A a A A e
-                     */
-
                     String[] newProduction = {production[0], rules.get(j)[1]};
                     // check conditions before removing
                     rules.remove(oldProductionIndex);
@@ -196,7 +181,6 @@ public class Grammar {
                             rules.get(tempIndexOfAddedRule)[1].equals(newProduction[1])) {
                         rules.remove(tempIndexOfAddedRule);
                     }
-//                    j--;
                     // re-avaluate it for | transitions
                 } else if (rules.get(j).length == 3) {
 
@@ -204,8 +188,6 @@ public class Grammar {
                             rules.get(j)[2]};
                     rules.add(rule);
 
-                    // rules.remove (j);
-                    // j--;
                 }
 
             }
@@ -229,151 +211,6 @@ public class Grammar {
             }
         }
         return unitProductions;
-    }
-
-    /**
-     * ############## STEP FIVE VERSION 2 ################## 2nd version done by
-     * BOXIONG ZHAO - NOT 100% correct couldn't not work for rules A->A1 A1->A2
-     *
-     * @param rules
-     */
-    public static void stepFiveV2(ArrayList<String[]> rules) {
-        int con = 1;
-        for (int ij = 0; ij < rules.size(); ij++) {
-            if (rules.get(ij).length == 2) {
-                con++;
-            }
-        }
-
-        for (int ij = 0; ij < con; ij++) {
-            int si = rules.size();
-            for (int m = 0; m < si; m++) {
-                if (rules.get(m).length == 2
-                        && Character.isUpperCase(rules.get(m)[1].charAt(0))) {
-                    for (int n = 0; n < si; n++) {
-                        if (rules.get(n).length == 2
-                                && Character.isUpperCase(rules.get(n)[1]
-                                .charAt(0))) {
-                            if (rules.get(m)[1].compareTo(rules.get(n)[0]) == 0) {
-                                String[] str0 = new String[2];
-                                str0[0] = rules.get(m)[0];
-                                str0[1] = rules.get(n)[1];
-                                rules.add(str0);
-                                // System.out.println(str0[0]+str0[1]+str0[2]);
-                            }
-
-                        }
-
-                    }
-                }
-            }
-
-            for (int ijj = 0; ijj < si; ijj++) {
-                for (int jji = 0; jji < si; jji++) {
-                    if (rules.get(ijj).length == 2
-                            && rules.get(jji).length == 2
-                            && rules.get(ijj)[0]
-                            .compareTo(rules.get(jji)[0]) == 0
-                            && rules.get(ijj)[1]
-                            .compareTo(rules.get(jji)[1]) == 0
-                            && ijj != jji) {
-                        rules.remove(ijj);
-
-                    }
-
-                }
-
-            }
-        }
-
-        for (int i1 = 0; i1 < rules.size(); i1++) {
-            for (int j1 = 0; j1 < rules.size(); j1++) {
-                if (rules.get(i1).length == 2 && rules.get(j1).length == 2
-                        && rules.get(i1)[0].compareTo(rules.get(j1)[1]) == 0
-                        && rules.get(i1)[1].compareTo(rules.get(j1)[0]) == 0) {
-                    for (int k1 = 0; k1 < rules.size(); k1++) {
-                        for (int l1 = 0; l1 < rules.get(k1).length; l1++) {
-                            if (rules.get(k1)[l1]
-                                    .compareTo(rules.get(i1)[0]) == 0) {
-                                rules.get(k1)[l1] = rules.get(j1)[1];
-                                // System.out.println("Got one AB BA");
-                            }
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-        int rs = rules.size();
-        for (int i2 = 0; i2 < rs; i2++) {
-            if (rules.get(i2).length == 2
-                    && Character.isUpperCase(rules.get(i2)[1].charAt(0))) {
-                for (int j2 = 0; j2 < rs; j2++) {
-                    if (rules.get(j2).length == 3
-                            && rules.get(j2)[0].compareTo(rules.get(i2)[1]) == 0) {
-                        String[] str1 = new String[3];
-                        str1[0] = rules.get(i2)[0];
-                        str1[1] = rules.get(j2)[1];
-                        str1[2] = rules.get(j2)[2];
-                        rules.add(str1);
-                        // System.out.println("Got one A->B B->BC");
-                    }
-                }
-            }
-
-        }
-        int rsize = rules.size();
-        for (int i3 = 0; i3 < rsize; i3++) {
-            if (rules.get(i3).length == 2
-                    && Character.isUpperCase(rules.get(i3)[1].charAt(0))) {
-                for (int j3 = 0; j3 < rsize; j3++) {
-                    if (rules.get(j3).length == 2
-                            && Character.isLowerCase(rules.get(j3)[1]
-                            .charAt(0))
-                            && rules.get(i3)[1].compareTo(rules.get(j3)[0]) == 0) {
-                        String[] str3 = new String[2];
-                        str3[0] = rules.get(i3)[0];
-                        str3[1] = rules.get(j3)[1];
-                        // System.out.println("got one A->B B->b");
-                        rules.add(str3);
-                    }
-                }
-
-            }
-        }
-
-        boolean bo = true;
-        while (bo) {
-            for (int z = 0; z < rules.size(); z++) {
-                if (rules.get(z).length == 2
-                        && Character.isUpperCase(rules.get(z)[1].charAt(0))) {
-                    rules.remove(z);
-
-                }
-
-            }
-            for (int i0 = 0; i0 < rules.size(); i0++) {
-                if (rules.get(i0).length == 2
-                        && Character.isUpperCase(rules.get(i0)[1].charAt(0))) {
-                    bo = true;
-                    break;
-
-                } else
-                    bo = false;
-            }
-        }
-        System.out.println("STEP 5");
-        for (int i = 0; i < rules.size(); i++) {
-            String[] rule = rules.get(i);
-            for (int j = 0; j < rule.length; j++) {
-                System.out.print(rule[j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 
     /**
@@ -465,29 +302,6 @@ public class Grammar {
         }
     }
 
-    /*
-     * BOXIONG ZHAO code which didn't work so well public static void
-     * stepFour(ArrayList<String[]> rules) { for (int l = 0; l < rules.size();
-     * l++) { if (rules.get(l).length == 2 && rules.get(l)[1].charAt(0) == 'e')
-     * { for (int o = 0; o < rules.size(); o++) { boolean bbb; if
-     * (rules.get(l)[0].compareTo(rules.get(o)[1]) == 0) { bbb = true; } else
-     * bbb = false; if (rules.get(o).length == 2 && bbb) { String[] chch = new
-     * String[2]; chch[0] = rules.get(o)[0]; chch[1] = "e"; rules.add(chch);
-     * //System.out.println("Got one A->B"); } } } } for (int i = 0; i <
-     * rules.size(); i++) { if (rules.get(i).length == 2) { if
-     * (rules.get(i)[1].charAt(0) == 'e') { for (int m = 0; m < rules.size();
-     * m++) { if (rules.get(m).length == 3) { boolean b, c; if
-     * (rules.get(i)[0].compareTo(rules.get(m)[1]) == 0) { b = true; } else b =
-     * false; if (rules.get(i)[0].compareTo(rules.get(m)[2]) == 0) { c = true; }
-     * else c = false; if (b && !c) { String[] kk = new String[2]; kk[0] =
-     * rules.get(m)[0]; kk[1] = rules.get(m)[2]; rules.add(kk); } else if (c &&
-     * !b) { String[] kk = new String[rules.get(m).length - 1]; kk[0] =
-     * rules.get(m)[0]; kk[1] = rules.get(m)[1]; rules.add(kk); } else if (b &&
-     * c) { String[] kk = new String[rules.get(m).length - 1]; kk[0] =
-     * rules.get(m)[0]; kk[1] = rules.get(m)[1]; rules.add(kk); } } }
-     * rules.remove(i); } } } }
-     */
-
     public static boolean isDoubleNonTerminal(ArrayList<String[]> rules,
                                               String NonTerminal) {
         // we removed the 1st one
@@ -549,11 +363,9 @@ public class Grammar {
      * @param rules
      */
     public static void stepTwo(ArrayList<String[]> rules) {
-
         int count = 0;
 
         for (int i = 0; i < rules.size(); i++) {
-
             while (rules.get(i).length > 3) {
 
                 int n = rules.get(i).length;
@@ -561,29 +373,21 @@ public class Grammar {
                 String[] g = new String[3];
 
                 g[0] = "P" + count;
-
                 g[1] = rules.get(i)[n - 2];
-
                 g[2] = rules.get(i)[n - 1];
 
                 rules.add(g);
 
                 String[] h = new String[n - 1];
 
-                for (int j = 0; j < n - 2; j++)
-
-                {
-
+                for (int j = 0; j < n - 2; j++) {
                     h[j] = rules.get(i)[j];
-
                 }
 
                 h[n - 2] = "P" + count;
-
                 count++;
 
                 rules.remove(i);
-
                 rules.add(h);
 
             }
@@ -606,19 +410,15 @@ public class Grammar {
      * @param rules
      */
     public static void stepOne(ArrayList<String[]> rules) {
-
         int s = rules.size();
 
         for (int i = 0; i < s; i++) {
-
             if (rules.get(i).length > 2) {
-
                 for (int j = 0; j < rules.get(i).length; j++) {
 
                     char n = rules.get(i)[j].charAt(0);
 
                     if (Character.isLowerCase(n)) {
-
                         String[] g = new String[2];
 
                         g[0] = rules.get(i)[j].toUpperCase() + "_0";// add one
@@ -634,10 +434,7 @@ public class Grammar {
                             rules.add(g);
 
                         rules.get(i)[j] = rules.get(i)[j].toUpperCase()
-                                + "_0"; // change
-                        // the
-                        // grammar
-
+                                + "_0"; // change the grammar
                     }
 
                 }
@@ -709,6 +506,5 @@ public class Grammar {
             return null;
         }
         return rules;
-
     }
 }

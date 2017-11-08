@@ -49,18 +49,19 @@ Normal Form](https://en.wikipedia.org/wiki/Chomsky_normal_form).
    
     `git clone git://github.com/belrbeZ/CYK-ChomskyNF`
    
-or Use Git or checkout with SVN using the web URL 
+    or Use Git or checkout with SVN using the web URL 
     
     `https://github.com/belrbeZ/CYK-ChomskyNF.git`
     
 2. Compile and start console applications with demonstration of algorithms.
-2.1. If you want to see whole cyk algorithm with converting grammar in CNF form
+
+    2.1. If you want to see whole cyk algorithm with converting grammar in CNF form
         
             `cd CYK-ChomskyNF/CoreMin/src/` 
             
             `javac cyk.java`
             
-2.2. If you want to see only CNF grammar converting
+    2.2. If you want to see only CNF grammar converting
         
             `cd CYK-ChomskyNF/CoreMin/src/`
             
@@ -68,6 +69,7 @@ or Use Git or checkout with SVN using the web URL
         
 3. Run the program by giving it a grammar|input file of your choosing and supplying
    a string:
+   
    3.1. CYK:
 
        `java Cyk grammar_hw6.txt word1_hw6.txt`
