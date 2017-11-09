@@ -1,4 +1,3 @@
-package cyk;
 /*
  * CYK algorithm for Context Free Language
  * Author: Alexander Vasiliev <alexandrvasilievby@gmail.com>
@@ -6,6 +5,8 @@ package cyk;
  */
 
 import cnf.Grammar;
+import cyk.CykCore;
+import cyk.ICykAlgorithm;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

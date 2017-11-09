@@ -480,6 +480,15 @@ public class Grammar {
     }
 
     /**
+     * returns the list of rules in grammar
+     *
+     * @return list of rules
+     */
+    public ArrayList<String[]> getRules() {
+        return rules;
+    }
+
+    /**
      * are the rules read or just null?
      *
      * @return

@@ -86,16 +86,16 @@ public class cyk {
     }
 
     /**
-     * Returns whether or not the string S belongs to Grammar
+     * Returns whether or not the string S belongs to grammar
      *
      * @param S
-     * @param Grammar
+     * @param grammar
      * @return
      */
-    public static boolean cyk(String S, Grammar Grammar) {
+    public static boolean cyk(String S, Grammar grammar) {
         int n = S.length();
-        int r = Grammar.size();
-        Integer[] startSymbols = findStartingSymbols(Grammar);
+        int r = grammar.size();
+        Integer[] startSymbols = findStartingSymbols(grammar);
         boolean P[][][] = new boolean[n][n][r];
         // let P[n,n,r] be an array of booleans. Initialize all elements of P to
         // false.
@@ -105,11 +105,11 @@ public class cyk {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < r; j++) {
                 // for each unit production Rj -> ai
-                String[] rule = (String[]) Grammar.get(j);
+                String[] rule = (String[]) grammar.get(j);
                 if (rule.length == 2) {
                     if (rule[1].equals(String.valueOf(S.charAt(i)))) {
 
-                        int A = findIndex(Grammar, rule[0]);
+                        int A = findIndex(grammar, rule[0]);
                         // set P[i,1,j] = true
                         P[i][0][A] = true;
 
@@ -117,6 +117,7 @@ public class cyk {
                 }
             }
         }
+
         // for each i = 2 to n -- Length of span
         for (int i = 1; i < n; i++) {
             // for each j = 1 to n-i+1 -- Start of span
@@ -125,12 +126,12 @@ public class cyk {
                 for (int k = 0; k < i; k++) {
                     // for each production RA -> RB RC
                     for (int m = 0; m < r; m++) {
-                        String[] rule = Grammar.get(m);
+                        String[] rule = grammar.get(m);
                         if (rule.length > 2) {
 
-                            int A = findIndex(Grammar, rule[0]);
-                            int B = findIndex(Grammar, rule[1]);
-                            int C = findIndex(Grammar, rule[2]);
+                            int A = findIndex(grammar, rule[0]);
+                            int B = findIndex(grammar, rule[1]);
+                            int C = findIndex(grammar, rule[2]);
                             // System.out.println(rule[2]+" "+C);
                             // if P[j,k,B] and P[j+k,i-k,C] then set P[j,i,A] =
                             // true
@@ -143,6 +144,7 @@ public class cyk {
             }
         }
 
+        printP3DMatrix(P, grammar, S);
 
         System.out.println("###Parse Tree###");
         for (int i = 0; i < S.length(); i++) {
@@ -150,7 +152,7 @@ public class cyk {
         }
 
         System.out.println();
-        printP(P, n, r, Grammar);
+        printP(P, n, r, grammar);
         // if any of P[1,n,x] is true (x is iterated over the set s, where s are
         // all the indices for Rs) then
         for (int i = 0; i < startSymbols.length; i++) {
@@ -164,21 +166,68 @@ public class cyk {
         return false; // S is not member of language
     }
 
+    private static void printP3DMatrix(boolean[][][] p, Grammar grammar, String input) {
+        ArrayList<ArrayList<String>> content = new ArrayList<>(p.length);
+
+        StringBuilder curStateIndex = new StringBuilder();
+        for (int i = 0; i < p.length; i++) {
+            ArrayList<String> contentRow = new ArrayList<>(p[i].length);
+
+            for (int j = 0; j < p[i].length; j++) {
+
+                for (int k = 0; k < p[i][j].length; k++) {
+                    String[] curState = grammar.get(k);
+
+                    if (p[i][j][k]) {
+                        for (int l = 0; l < curState.length; l++) {
+                            curStateIndex.append(curState[l]);
+                            if (l == 0) {
+                                curStateIndex.append("->");
+                            } else if (l < curState.length - 1) {
+                                curStateIndex.append(" ");
+                            } else if (l == curState.length - 1) {
+                                curStateIndex.append(";");
+                            }
+                        }
+                    }
+                }
+                if (curStateIndex.length() == 0) {
+                    curStateIndex.append(" ");
+                }
+                contentRow.add(j, curStateIndex.toString());
+                curStateIndex.setLength(0);
+            }
+
+            content.add(i, contentRow);
+        }
+
+
+        ArrayList<String> headers = new ArrayList<>();
+        for (int i = 0; i < input.length(); i++) {
+            headers.add(String.valueOf(input.charAt(i)));
+            curStateIndex.setLength(0);
+        }
+
+        ConsoleTable consoleTable = new ConsoleTable(headers, content);
+        consoleTable.printTable();
+
+    }
+
     /**
      * Prints the parse table.
      *
      * @param P
      * @param n
      * @param r
-     * @param Grammar
+     * @param grammar
      */
-    public static void printP(boolean P[][][], int n, int r, Grammar Grammar) {
+    public static void printP(boolean P[][][], int n, int r, Grammar grammar) {
         for (int i = 0; i < n; i++) {
             for (int k = 0; k < n - i; k++) {
                 System.out.print("{");
                 for (int m = 0; m < r; m++) {
                     if (P[k][i][m]) {
-                        System.out.print(Grammar.get(m)[0] + " ");
+                        System.out.print(grammar.get(m)[0] + " ");
                     }
 
                 }
