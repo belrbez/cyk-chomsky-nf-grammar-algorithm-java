@@ -4,12 +4,12 @@ Implementation of algorithm to Converting CFGs to CNF (Chomsky Normal Form) and 
 There are two modules: root and CoreMin.
 Use CoreMin module for simple start of algorithms.
 
-##Cocke-Younger-Algorithm
+## Cocke-Younger-Algorithm
 This is the famous CYK algorithm implemented in Java.
 It can be used to test a given string with a grammar file that is in ![Chomsky
 Normal Form](https://en.wikipedia.org/wiki/Chomsky_normal_form).
 
-###CYK formal algorithm [1]
+### CYK formal algorithm [1]
 
 	let the input be a string S consisting of n characters: a1 ... an.
 	let the grammar contain r nonterminal symbols R1 ... Rr.
@@ -29,7 +29,7 @@ Normal Form](https://en.wikipedia.org/wiki/Chomsky_normal_form).
 	  S is not member of language
 
 
-###Chomsky Normal Form to Context Free Grammar algorithm [2]
+### Chomsky Normal Form to Context Free Grammar algorithm [2]
 
 	1. Remove all nonterminal from the right hand side of all productions except the unit
 	productions.
